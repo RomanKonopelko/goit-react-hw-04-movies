@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import MoviesApi from '../servises/moviesAPI'
 
 class Reviews extends Component {
@@ -8,7 +8,6 @@ class Reviews extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.props);
         const { movieId } = this.props.match.params
         this.setState({
             reviews: await MoviesApi.getMovieReviews(movieId)
@@ -31,4 +30,11 @@ class Reviews extends Component {
     }
 }
 
+Reviews.propTypes = {
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            movieId: PropTypes.string.isRequired
+        }).isRequired
+    })
+}
 export default Reviews

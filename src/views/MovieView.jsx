@@ -16,9 +16,10 @@ class MovieView extends Component {
 
     render() {
         const { movies } = this.state
+        const { BASE_IMG_URL, DEFAULT_IMG } = MoviesApi
         return <div className='home-container'>
             <h1>Today's popular</h1>
-            <MovieList movies={movies} src={MoviesApi.BASE_IMG_URL} />
+            <MovieList movies={movies} src={BASE_IMG_URL} defaultImg={DEFAULT_IMG} />
         </div>
 
     }

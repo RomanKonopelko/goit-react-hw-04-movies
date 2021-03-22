@@ -1,5 +1,7 @@
 import routes from '../routes'
+import PropTypes from 'prop-types'
 import { NavLink, withRouter } from 'react-router-dom'
+import '../app.css'
 
 function MovieList({ movies, src, defaultImg, location }) {
     return (<ul className='movie-list'>
@@ -16,6 +18,17 @@ function MovieList({ movies, src, defaultImg, location }) {
             </li>
         })}
     </ul >)
+}
+
+MovieList.propTypes = {
+    movies: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        poster_path: PropTypes.string,
+        title: PropTypes.string.isRequired
+    })).isRequired,
+    src: PropTypes.string.isRequired,
+    defaultImg: PropTypes.string.isRequired,
+    location: PropTypes.shape({}).isRequired,
 }
 
 export default withRouter(MovieList)

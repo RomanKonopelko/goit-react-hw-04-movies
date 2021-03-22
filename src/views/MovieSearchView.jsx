@@ -1,6 +1,8 @@
 import { Component } from "react"
 import MoviesApi from '../servises/moviesAPI'
 import MovieList from '../Components/MovieList'
+import PropTypes from 'prop-types'
+import '../app.css'
 
 class MovieSearchView extends Component {
     state = {
@@ -62,8 +64,8 @@ class MovieSearchView extends Component {
     render() {
         const { query, movies } = this.state
         const { BASE_IMG_URL, DEFAULT_IMG } = MoviesApi
-        return <div className='search-from'>
-            <form>
+        return <div>
+            <form className='search-form'>
                 <input type="text" value={query} onChange={this.handleOnChange} />
                 <button type='submit' onClick={this.handleMovieSearch}>Search</button>
             </form>
@@ -72,4 +74,12 @@ class MovieSearchView extends Component {
     }
 }
 
+MovieSearchView.propTypes = {
+    location: PropTypes.shape({
+        search: PropTypes.string.isRequired,
+    }).isRequired,
+    history: PropTypes.shape({
+        location: PropTypes.object.isRequired,
+    }).isRequired,
+}
 export default MovieSearchView

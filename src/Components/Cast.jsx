@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import PropTypes from 'prop-types'
 import MoviesApi from '../servises/moviesAPI'
 
 class Cast extends Component {
@@ -8,7 +9,6 @@ class Cast extends Component {
 
     async componentDidMount() {
         const { movieId } = this.props.match.params
-        console.log(this.props);
         this.setState({
             cast: await MoviesApi.getMovieCredits(movieId).then(data => data.cast)
         })
@@ -28,4 +28,11 @@ class Cast extends Component {
     }
 }
 
+Cast.propTypes = {
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            movieId: PropTypes.string.isRequired,
+        }).isRequired
+    })
+}
 export default Cast
