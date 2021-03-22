@@ -58,7 +58,7 @@ class MovieDetailView extends Component {
                             Reviews </NavLink>
                     </li>
                     <li className='review-link'><NavLink to={{
-                        pathname: `${match.url}${routes.reviews}`,
+                        pathname: `${match.url}${routes.cast}`,
                         state: location
                     }}>Credits</NavLink></li>
                 </ul>
