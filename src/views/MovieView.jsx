@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { Link } from 'react-router-dom'
 import MoviesApi from '../servises/moviesAPI'
+import MovieList from '../Components/MovieList'
 
 
 class MovieView extends Component {
@@ -16,14 +16,11 @@ class MovieView extends Component {
 
     render() {
         const { movies } = this.state
-        const { match } = this.props
-        return <ul className='movie-list'>
-            {movies.map(movie => {
-                return <li key={movie.id}>
-                    <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
-                </li>
-            })}
-        </ul>
+        return <div className='home-container'>
+            <h1>Today's popular</h1>
+            <MovieList movies={movies} src={MoviesApi.BASE_IMG_URL} />
+        </div>
+
     }
 }
 export default MovieView

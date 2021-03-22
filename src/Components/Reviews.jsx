@@ -1,4 +1,5 @@
 import { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 import MoviesApi from '../servises/moviesAPI'
 
 class Reviews extends Component {
@@ -7,6 +8,7 @@ class Reviews extends Component {
     }
 
     async componentDidMount() {
+        console.log(this.props);
         const { movieId } = this.props.match.params
         this.setState({
             reviews: await MoviesApi.getMovieReviews(movieId)
@@ -14,6 +16,7 @@ class Reviews extends Component {
     }
     render() {
         const { reviews } = this.state
+
         return <div>{reviews.length !== 0
             ? <ul className='reviews-list'>
                 {reviews.map(({ author, content, id }) => {

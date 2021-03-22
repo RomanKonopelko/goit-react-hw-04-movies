@@ -1,8 +1,10 @@
-import { Component } from 'react'
+import { Component, Suspense, lazy } from 'react'
 import { NavLink, Route, Switch } from 'react-router-dom'
-import Reviews from '../Components/Revievs'
-import Cast from '../Components/Cast'
 import MoviesApi from '../servises/moviesAPI'
+import routes from '../routes'
+
+const Reviews = lazy(() => import('../Components/Reviews'));
+const Cast = lazy(() => import('../Components/Cast'));
 
 class MovieDetailView extends Component {
     state = {
@@ -16,35 +18,53 @@ class MovieDetailView extends Component {
 
     async componentDidMount() {
         const { movieId } = this.props.match.params
+        console.log(movieId);
         this.setState({ ...await MoviesApi.getMovieDetails(movieId) }
         )
     }
 
+    handleGoBack = () => {
+        const { location, history } = this.props
+        console.log(location.state.state, 'test');
+        history.push(location?.state?.state?.fromState || location?.state?.fromState || routes.movies)
+        console.log(history, '2');
+    }
+
     render() {
-        const { backdrop_path, genres, popularity, title, tagline, overview } = this.state
-        const { match } = this.props
+        const { poster_path, genres, popularity, title, tagline, overview } = this.state
+        const { match, location } = this.props
         const { BASE_IMG_URL, DEFAULT_IMG } = MoviesApi
-        const imageCheck = backdrop_path ? BASE_IMG_URL + backdrop_path : DEFAULT_IMG
+        const imageCheck = poster_path ? BASE_IMG_URL + poster_path : DEFAULT_IMG
         return <>
             <div className='movie-detail__container'>
-                <h1>{title}</h1>
-                <span className='genres'>
-                    {genres?.map(genre => {
-                        return genre.name
-                    })}
-                </span>
-                <span className='popularity'>{popularity}</span>
+                <button type='button' className='backBtn' onClick={this.handleGoBack}>Назад</button>
                 <div className='img-wrapper'><img src={imageCheck} alt={title} /><span className='tagline'>{tagline}</span></div>
-                <p className='overview'>{overview}</p>
+                <div className='detail-wrapper'>
+                    <h1>{title}</h1>
+                    <span className='genres'>
+                        {genres?.map(genre => {
+                            return genre.name
+                        })}
+                    </span>
+                    <span className='popularity'>{popularity}</span>
+                    <p className='overview'>{overview}</p>
+                </div>
                 <ul className='review-list'>
-                    <li><NavLink to={`${match.url}/reviews`}>Reviews</NavLink></li>
-                    <li><NavLink to={`${match.url}/cast`}>Credits</NavLink></li>
+                    <li><NavLink to={{
+                        pathname: `${match.url}${routes.reviews}`,
+                        state: location
+                    }}>Reviews </NavLink>
+                    </li>
+                    <li><NavLink to={`${match.url}${routes.cast}`}>Credits</NavLink></li>
                 </ul>
+
             </div>
-            <Switch>
-                <Route path={`${match.path}/reviews`} component={Reviews} />
-                <Route path={`${match.path}/cast`} component={Cast} />
-            </Switch>
+            <Suspense fallback={<h1>Loading</h1>}>
+                <Switch>
+                    <Route path={`${match.path}${routes.reviews}`} component={Reviews} />
+                    <Route path={`${match.path}${routes.cast}`} component={Cast} />
+                </Switch>
+            </Suspense>
         </>
     }
 }
